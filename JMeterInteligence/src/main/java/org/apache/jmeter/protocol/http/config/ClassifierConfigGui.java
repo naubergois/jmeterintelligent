@@ -115,6 +115,12 @@ public class ClassifierConfigGui extends AbstractConfigGui implements
 				.getPropertyAsString(ConfigTestElement.PASSWORD));
 	}
 
+	@Override
+	public String getStaticLabel() {
+		// TODO Auto-generated method stub
+		return "ClassifierController";
+	}
+
 	/* Implements JMeterGUIComponent.createTestElement() */
 	public TestElement createTestElement() {
 		ConfigTestElement element = new ConfigTestElement();
@@ -195,22 +201,21 @@ public class ClassifierConfigGui extends AbstractConfigGui implements
 		JPanel panel = new JPanel(new BorderLayout(5, 0));
 		classificar.addActionListener(this);
 		classificar.setActionCommand("CLASSIFICAR");
-		
+
 		panel.add(classificar, BorderLayout.CENTER);
-		
-		return panel;
-	}
-	
-	private JPanel createDataSetButtonPanel() {
-		JPanel panel = new JPanel(new BorderLayout(5, 0));
-		
-		dataset.addActionListener(this);
-		dataset.setActionCommand("LISTAR");
-		
-		panel.add(dataset, BorderLayout.CENTER);
+
 		return panel;
 	}
 
+	private JPanel createDataSetButtonPanel() {
+		JPanel panel = new JPanel(new BorderLayout(5, 0));
+
+		dataset.addActionListener(this);
+		dataset.setActionCommand("LISTAR");
+
+		panel.add(dataset, BorderLayout.CENTER);
+		return panel;
+	}
 
 	public void createDataSet(HTTPSamplerBaseClassifier sampler) {
 		File f = new File("datatype.csv");
@@ -291,16 +296,20 @@ public class ClassifierConfigGui extends AbstractConfigGui implements
 		if (e.getActionCommand().equals("LISTAR")) {
 			ResultDataSet.setCalculators(new HashMap<String, Calculator>());
 			for (ResultDataSet result : ResultDataSet.getResults()) {
-				result.setHeaderWordList(ResultDataSet.getWords(result.getHeader()));
-				result.setBodyWordList(ResultDataSet.getWords(result.getResponseBody()));
-				
-				if(ResultDataSet.getCalculators().containsKey(result.getUrl())){
-					Calculator calculator=ResultDataSet.getCalculators().get(result.getUrl());
+				result.setHeaderWordList(ResultDataSet.getWords(result
+						.getHeader()));
+				result.setBodyWordList(ResultDataSet.getWords(result
+						.getResponseBody()));
+
+				if (ResultDataSet.getCalculators().containsKey(result.getUrl())) {
+					Calculator calculator = ResultDataSet.getCalculators().get(
+							result.getUrl());
 					calculator.addSample(result.getResult());
-				}else{
-					Calculator calculator=new Calculator(result.getUrl());
+				} else {
+					Calculator calculator = new Calculator(result.getUrl());
 					calculator.addSample(result.getResult());
-					ResultDataSet.getCalculators().put(result.getUrl(), calculator);
+					ResultDataSet.getCalculators().put(result.getUrl(),
+							calculator);
 				}
 				System.out.println(result.toString());
 				ResultDataSet.addResultDecisionFile(result);

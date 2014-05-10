@@ -1680,6 +1680,7 @@ public abstract class HTTPSamplerBaseClassifier extends AbstractSampler
 	 */
 	protected HTTPSampleResult resultProcessing(boolean areFollowingRedirect,
 			int frameDepth, HTTPSampleResult res) {
+		System.out.print("Enter processing");
 		boolean wasRedirected = false;
 		if (!areFollowingRedirect) {
 			if (res.isRedirect()) {
@@ -1822,6 +1823,7 @@ public abstract class HTTPSamplerBaseClassifier extends AbstractSampler
 		// + JMeterContextService.getTotalThreads() + "@"
 		// + res.getSampleLabel());
 
+		System.out.print("Add resul;t file");
 		ResultDataSet.addResultDecisionTestFile(result);
 
 		// if (result.getFunction().equals("Aprendizado")) {

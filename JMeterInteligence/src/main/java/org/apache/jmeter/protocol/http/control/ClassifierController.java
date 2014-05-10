@@ -461,10 +461,14 @@ public class ClassifierController extends GenericController implements
 											ClusterEvaluation eval = new ClusterEvaluation();
 											eval.setClusterer(clusterer);
 											eval.evaluateClusterer(data);
-											ClassifierControlPanel
-													.getArea()
-													.setText(
-															eval.clusterResultsToString());
+											if (ClassifierControlPanel
+													.getArea() != null) {
+
+												ClassifierControlPanel
+														.getArea()
+														.setText(
+																eval.clusterResultsToString());
+											}
 
 											executou = true;
 
