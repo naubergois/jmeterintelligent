@@ -188,11 +188,18 @@ public class HttpTestSampleGuiClassifier extends AbstractSamplerGui implements
 		this.configureTestElement(sampler);
 	}
 
+	@Override
+	public String getStaticLabel() {
+		return "Http Request Classifier";
+	}
+
 	/**
 	 * {@inheritDoc}
 	 */
 	public String getLabelResource() {
-		return this.getClass().getSimpleName(); // $NON-NLS-1$
+
+		return "Http Classifier Tester"; // $NON-NLS-1$
+
 	}
 
 	private void init() {// called from ctor, so must not be overridable

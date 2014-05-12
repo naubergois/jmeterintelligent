@@ -346,78 +346,79 @@ public class ClassifierController extends GenericController implements
 
 									if (monitorCSV) {
 
-										ReadCVS csv = new ReadCVS();
-
-										Properties prop = new Properties();
-										InputStream input = null;
-
-										input = new FileInputStream(
-												"config.properties");
-
-										// load a properties file
-										prop.load(input);
-
-										String csvFile = prop
-												.getProperty("csvFile");
-										String csvFileCPU = prop
-												.getProperty("csvFileCPU");
-										String csvFilememory = prop
-												.getProperty("csvFilememory");
-										String csvFileSwap = prop
-												.getProperty("csvFileSwap");
-										String csvFileTCP = prop
-												.getProperty("csvFileTCP");
-										boolean monitoring = Boolean
-												.valueOf(prop
-														.getProperty("monitoring"));
-										String fileMedia = prop
-												.getProperty("fileMedia");
-										String fileMax = prop
-												.getProperty("fileMax");
-										int number = ClassifierController.configurationsCount - 1;
-
-										if (number >= 0) {
-
-											System.out
-													.println("Configuracao numero "
-															+ number);
-
-											csv.run(csvFile, csvFileCPU,
-													csvFilememory, csvFileSwap,
-													csvFileTCP, monitoring,
-													configurations.get(number),
-													fileMedia, fileMax);
-										}
+										/*
+										 * ReadCVS csv = new ReadCVS();
+										 * 
+										 * Properties prop = new Properties();
+										 * InputStream input = null;
+										 * 
+										 * input = new FileInputStream(
+										 * "config.properties");
+										 * 
+										 * // load a properties file
+										 * prop.load(input);
+										 * 
+										 * String csvFile = prop
+										 * .getProperty("csvFile"); String
+										 * csvFileCPU = prop
+										 * .getProperty("csvFileCPU"); String
+										 * csvFilememory = prop
+										 * .getProperty("csvFilememory"); String
+										 * csvFileSwap = prop
+										 * .getProperty("csvFileSwap"); String
+										 * csvFileTCP = prop
+										 * .getProperty("csvFileTCP"); boolean
+										 * monitoring = Boolean .valueOf(prop
+										 * .getProperty("monitoring")); String
+										 * fileMedia = prop
+										 * .getProperty("fileMedia"); String
+										 * fileMax = prop
+										 * .getProperty("fileMax"); int number =
+										 * ClassifierController
+										 * .configurationsCount - 1;
+										 * 
+										 * if (number >= 0) {
+										 * 
+										 * System.out
+										 * .println("Configuracao numero " +
+										 * number);
+										 * 
+										 * csv.run(csvFile, csvFileCPU,
+										 * csvFilememory, csvFileSwap,
+										 * csvFileTCP, monitoring,
+										 * configurations.get(number),
+										 * fileMedia, fileMax); }
+										 */
 
 										if (configurationsCount < configurations
 												.size()) {
 
 											ClassifierController.monitorCSV = false;
 
-											File file = new File(csvFile);
+											// File file = new File(csvFile);
 
-											File newFile = new File(
-													"test"
-															+ System.currentTimeMillis()
-															+ ".csv");
+											// File newFile = new File(
+											// "test"
+											// + System.currentTimeMillis()
+											// + ".csv");
 
-											try {
+											// try {
 
-												FileUtils.copyFile(file,
-														newFile);
+											// FileUtils.copyFile(file,
+											// newFile);
 
-											} catch (Exception e) {
-												e.printStackTrace();
-											}
+											// } catch (Exception e) {
+											// e.printStackTrace();
+											// }
 
-											if (file.delete()) {
-												System.out.println(file
-														.getName()
-														+ " is deleted!");
-											} else {
-												System.out
-														.println("Delete operation is failed.");
-											}
+											// if (file.delete()) {
+											// System.out.println(file
+											// .getName()
+											// + " is deleted!");
+											// } else {
+											// System.out
+											// .println("Delete operation is failed.");
+											// }
 
 											Client client = new Client();
 											client.executa(configurations
@@ -445,31 +446,6 @@ public class ClassifierController extends GenericController implements
 															+ configurationsCount);
 
 										} else {
-
-											CSVLoader loader = new CSVLoader();
-											loader.setSource(new File(fileMedia));
-											Instances data = loader
-													.getDataSet();
-
-											// setting class attribute
-											// data.setClassIndex(data
-											// .numAttributes() - 1);
-
-											MakeDensityBasedClusterer clusterer = new MakeDensityBasedClusterer();
-											clusterer.buildClusterer(data);
-
-											ClusterEvaluation eval = new ClusterEvaluation();
-											eval.setClusterer(clusterer);
-											eval.evaluateClusterer(data);
-											if (ClassifierControlPanel
-													.getArea() != null) {
-
-												ClassifierControlPanel
-														.getArea()
-														.setText(
-																eval.clusterResultsToString());
-											}
-
 											executou = true;
 
 											this.monitor = false;

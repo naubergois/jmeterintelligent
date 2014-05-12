@@ -80,7 +80,8 @@ public final class HTTPSamplerFactoryClassifier {
 	}
 
 	public static String[] getImplementations() {
-		return new String[] { DEFAULT_CLASSNAME };
+		return new String[] { IMPL_HTTP_CLIENT4, IMPL_HTTP_CLIENT3_1,
+				IMPL_JAVA, IMPL_JAVA_CLASSIFIER };
 	}
 
 	public static HTTPAbstractImplClassifier getImplementation(String impl,

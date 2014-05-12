@@ -434,5 +434,212 @@ public class ReadCVS {
 
 		System.out.println("Done");
 	}
+	
+	public void runClassifier(String csvFile, String csvFileCPU, String csvFilememory,
+			String csvFileSwap, String csvFileTCP, boolean monitoring,
+			Configuration configuration, String fileMedia, String fileMax) {
+
+		// String csvFile =
+		// "/Users/naubergois/Documents/apache-jmeter-2.9/bin/datset1.csv";
+		// String csvFileCPU =
+		// "/Users/naubergois/Documents/apache-jmeter-2.9/bin/datasetmetric";
+		// String csvFilememory =
+		// "/Users/naubergois/Documents/apache-jmeter-2.9/bin/datasetmetric2";
+		// String csvFileSwap =
+		// "/Users/naubergois/Documents/apache-jmeter-2.9/bin/datasetmetric3";
+		// String csvFileTCP =
+		// "/Users/naubergois/Documents/apache-jmeter-2.9/bin/datasetmetric5";
+		BufferedReader br = null;
+		String line = "";
+		String cvsSplitBy = ",";
+
+		ArrayList atributosLista = new ArrayList();
+		ArrayList atributosListaBytes = new ArrayList();
+
+		try {
+
+			br = new BufferedReader(new FileReader(csvFile));
+
+			if (monitoring) {
+				readFile(mapamemory, csvFilememory);
+				readFile(mapaCPU, csvFileCPU);
+				readFile(mapaswap, csvFileSwap);
+				readFile(mapaTCP, csvFileTCP);
+			}
+
+			boolean firstLine = true;
+
+			while ((line = br.readLine()) != null) {
+
+				double cpu = 0;
+				double memory = 0;
+				double swap = 0;
+				double tcp = 0;
+
+				// if (!firstLine) {
+
+				// use comma as separator
+				String[] atributos = line.split(cvsSplitBy);
+
+				long timestamp = Long.valueOf(atributos[0]);
+
+				if (monitoring) {
+
+					cpu = searchValue(mapaCPU, timestamp);
+
+					timestamp = Long.valueOf(atributos[0]);
+
+					memory = searchValue(mapaCPU, timestamp);
+
+					timestamp = Long.valueOf(atributos[0]);
+
+					swap = searchValue(mapaswap, timestamp);
+
+					System.out.print(" Timestamp " + atributos[0]);
+
+					timestamp = Long.valueOf(atributos[0]);
+
+					tcp = searchValue(mapaTCP, timestamp);
+				}
+
+				if (mapa.containsKey(atributos[2])) {
+					Double valor = (Double) mapa.get(atributos[2]);
+					valor += Double.valueOf(atributos[6]);
+					mapa.put(atributos[2], valor);
+					Integer contador = (Integer) mapaCount.get(atributos[2]);
+					contador++;
+					mapaCount.put(atributos[2], contador);
+
+				} else {
+					mapa.put(atributos[2], Double.valueOf(atributos[6]));
+					mapaCount.put(atributos[2], 1);
+				}
+
+				if (mapaBytes.containsKey(atributos[2])) {
+					Double valor = (Double) mapaBytes.get(atributos[2]);
+					valor += Double.valueOf(atributos[4]);
+					mapaBytes.put(atributos[2], valor);
+					Integer contador = (Integer) mapaBytesCount
+							.get(atributos[2]);
+					contador++;
+					mapaBytesCount.put(atributos[2], contador);
+
+				} else {
+					mapaBytes.put(atributos[2], Double.valueOf(atributos[4]));
+					mapaBytesCount.put(atributos[2], 1);
+				}
+
+				// preecnheLista(mapa, Long.valueOf(atributos[2]),
+				// Double.valueOf(atributos[6]));
+
+				// preecnheLista(mapaBytes, Long.valueOf(atributos[2]),
+				// Double.valueOf(atributos[4]));
+
+				if (monitoring) {
+
+					preecnheLista(mapaCPUFinal, Long.valueOf(atributos[2]), cpu);
+					preecnheLista(mapamemoryFinal, Long.valueOf(atributos[2]),
+							memory);
+					preecnheLista(mapaSWAPmemoryFinal,
+							Long.valueOf(atributos[2]), swap);
+					preecnheLista(mapaTCPfinal, Long.valueOf(atributos[2]), tcp);
+				}
+				// } else {
+				// firstLine = false;
+				// }
+
+			}
+
+			PrintWriter writer = new PrintWriter(new BufferedWriter(
+					new FileWriter(fileMedia, true)));
+			// "/Users/naubergois/Documents/apache-jmeter-2.9/bin/datasetresultmedia.csv",
+			// "UTF-8");
+			// PrintWriter writer1 = new PrintWriter(fileMax, "UTF-8");
+			// "/Users/naubergois/Documents/apache-jmeter-2.9/bin/datasetresultmax.csv",
+			// "UTF-8");
+
+			File fileLength = new File(fileMedia);
+
+			LineNumberReader lnr = new LineNumberReader(new FileReader(
+					fileLength));
+			lnr.skip(Long.MAX_VALUE);
+			int lines = lnr.getLineNumber();
+			// Finally, the LineNumberReader object should be closed to prevent
+			// resource leak
+			lnr.close();
+			if (lines <= 0) {
+				writer.println("usuarios,media,bytesmedios,cpu,memoria,swap,tcp,configuracao");
+			}
+			// writer1.println("usuarios,maximo,bytesmaximos");
+			for (Object key : mapa.keySet()) {
+
+				Double soma = (Double) mapa.get(key);
+				Integer contador = (Integer) mapaCount.get(key);
+
+				Double somaBytes = (Double) mapaBytes.get(key);
+				Integer contadorBytes = (Integer) mapaBytesCount.get(key);
+				// ArrayList listaAuxBytes = (ArrayList) mapaBytes.get(key);
+
+				double mediaCPU = 0;
+				double mediaMemoria = 0;
+				double swapMedio = 0;
+				double tcpMedio = 0;
+				double maximoCPU = 0;
+
+				if (monitoring) {
+
+					ArrayList listaAuxCPU = (ArrayList) mapaCPUFinal.get(key);
+					ArrayList listaAuxMemory = (ArrayList) mapamemoryFinal
+							.get(key);
+					ArrayList listaAuxSwap = (ArrayList) mapaSWAPmemoryFinal
+							.get(key);
+
+					ArrayList listaAuxTCP = (ArrayList) mapaTCPfinal.get(key);
+
+					mediaCPU = calculateAverage(listaAuxCPU);
+					mediaMemoria = calculateAverage(listaAuxMemory);
+					swapMedio = calculateAverage(listaAuxSwap);
+					tcpMedio = calculateAverage(listaAuxTCP);
+					maximoCPU = calculateMAx(listaAuxCPU);
+				}
+
+				// double maximo = calculateMAx(listaAux);
+				double media = soma / Double.valueOf(contador);
+				double mediaBytes = somaBytes / Double.valueOf(contadorBytes);
+				// double maximoBytes = calculateMAx(listaAuxBytes);
+
+				System.out.println("Arquivo" + fileMedia + ":" + key.toString()
+						+ "," + media + "," + mediaBytes + "," + mediaCPU + ","
+						+ mediaMemoria + "," + swapMedio + "," + tcpMedio + ","
+						+ configuration.getConfigurationName() + "\n");
+
+				writer.println(key.toString() + "," + media + "," + mediaBytes
+						+ "," + mediaCPU + "," + mediaMemoria + "," + swapMedio
+						+ "," + tcpMedio + ","
+						+ configuration.getConfigurationName());
+				// writer1.println(key.toString() + "," + maximo + ","
+				// + maximoBytes + "\n");
+
+			}
+
+			writer.close();
+			// writer1.close();
+
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			if (br != null) {
+				try {
+					br.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+
+		System.out.println("Done");
+	}
 
 }

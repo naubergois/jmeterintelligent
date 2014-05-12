@@ -118,7 +118,7 @@ public class ClassifierConfigGui extends AbstractConfigGui implements
 	@Override
 	public String getStaticLabel() {
 		// TODO Auto-generated method stub
-		return "ClassifierController";
+		return "Classifier Config [In development]";
 	}
 
 	/* Implements JMeterGUIComponent.createTestElement() */

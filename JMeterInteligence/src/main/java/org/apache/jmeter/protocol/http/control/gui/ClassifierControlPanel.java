@@ -65,6 +65,12 @@ public class ClassifierControlPanel extends AbstractControllerGui implements
 	public static JTextArea getArea() {
 		return area;
 	}
+	
+	@Override
+	public String getStaticLabel() {
+		// TODO Auto-generated method stub
+		return "Classifier Controller";
+	}
 
 	public static void setArea(JTextArea area) {
 		ClassifierControlPanel.area = area;
@@ -257,7 +263,7 @@ public class ClassifierControlPanel extends AbstractControllerGui implements
 	}
 
 	public String getLabelResource() {
-		return "ClassifierController"; // $NON-NLS-1$
+		return "Classifier Controller"; // $NON-NLS-1$
 	}
 
 	/**

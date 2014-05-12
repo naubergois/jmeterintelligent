@@ -839,6 +839,8 @@ public class UtilClassifier implements Serializable {
 		// JMeterTreeNode node2 = (JMeterTreeNode) node1.getChildAt(0);
 		// group = (ThreadGroup) node2.getTestElement();
 
+		HashTree test = null;
+
 		try {
 			StandardJMeterEngine engine = JMeterContextService.getContext()
 					.getEngine();
@@ -848,7 +850,7 @@ public class UtilClassifier implements Serializable {
 				Field field = engine.getClass().getDeclaredField("test");
 				field.setAccessible(true);
 
-				HashTree test = (HashTree) field.get(engine);
+				test = (HashTree) field.get(engine);
 
 				SearchByClass<AbstractThreadGroup> search = new SearchByClass<AbstractThreadGroup>(
 						AbstractThreadGroup.class);
@@ -890,15 +892,18 @@ public class UtilClassifier implements Serializable {
 				if (notifier != null) {
 
 					if (threadGroupTree != null) {
+
 						group = groups.get(i++);
-						System.out.println("Executando " + threadGroupTree);
-						System.out.println("Group " + group);
+						//System.out.println("Executando " + threadGroupTree);
+						//System.out.println("Group " + group);
+
 						this.start(nameThread, 1, notifier, threadGroupTree,
 								JMeterContextService.getContext().getEngine(),
 								group, users, controller);
-					}
-				}
 
+					}
+
+				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

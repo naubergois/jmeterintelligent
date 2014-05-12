@@ -2,8 +2,10 @@ package org.apache.jmeter.protocol.http.sampler;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.LineNumberReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
@@ -13,6 +15,16 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.util.Calculator;
 
 public class ResultDataSet {
+
+	private String configuration;
+
+	public String getConfiguration() {
+		return configuration;
+	}
+
+	public void setConfiguration(String configuration) {
+		this.configuration = configuration;
+	}
 
 	private long timeStamp;
 
@@ -420,6 +432,48 @@ public class ResultDataSet {
 		}
 	}
 
+	public static void addResultDecisionTestFileClassifier(ResultDataSet result) {
+		ResultDataSet.createResultDecisionTestFile();
+		String filename = "resultDecisionTestClassifier.csv";
+		try {
+
+			File fileLength = new File(filename);
+
+			if (!(fileLength.exists())) {
+				fileLength.createNewFile();
+			}
+
+			LineNumberReader lnr = new LineNumberReader(new FileReader(
+					fileLength));
+			lnr.skip(Long.MAX_VALUE);
+			int lines = lnr.getLineNumber();
+			// Finally, the LineNumberReader object should be closed to prevent
+			// resource leak
+			lnr.close();
+
+			boolean append = true;
+
+			FileWriter fw = new FileWriter(filename, append);
+
+			if (lines <= 0) {
+				fw.write("timestamp,sample,usuarios,bytes,bodysize,headersize,reponsetime,configuracao\n");
+			}
+
+			fw.write(result.getTimeStamp() + "," + "\""
+					+ result.getSampleLabel() + "\"" + ","
+					+ result.getThreadNumber() + ","
+
+					+ result.getBytes() + "," + result.getBodySize() + ","
+
+					+ result.getHeaderSize() + "," + +result.getResponseTime()
+					+ "," + result.getConfiguration() + "\n");// appends
+
+			fw.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
 	public static File createResultDecisionFile() {
 		if (!(ResultDataSet.testResultDecisionExist())) {
 
@@ -470,12 +524,13 @@ public class ResultDataSet {
 			try {
 				boolean bool = f.createNewFile();
 				String filename = "resultDecisionTest.csv";
-				//FileWriter fw = new FileWriter(filename, true);
+				// FileWriter fw = new FileWriter(filename, true);
 
-				//fw.write("usuarios,bytes,bodysize,headersize,responsetime\n");// appends
+				// fw.write("usuarios,bytes,bodysize,headersize,responsetime\n");//
+				// appends
 
 				// file
-				//fw.close();
+				// fw.close();
 
 			} catch (IOException e) {
 				// TODO Auto-generated catch block

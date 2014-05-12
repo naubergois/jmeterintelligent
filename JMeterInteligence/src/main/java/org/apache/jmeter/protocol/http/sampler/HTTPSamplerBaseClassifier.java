@@ -1514,7 +1514,7 @@ public abstract class HTTPSamplerBaseClassifier extends AbstractSampler
 	 */
 
 	public void testEnded() {
-		System.out.println("finalizou");
+		//System.out.println("finalizou");
 	}
 
 	/**
@@ -1552,7 +1552,7 @@ public abstract class HTTPSamplerBaseClassifier extends AbstractSampler
 
 	public void testStarted() {
 
-		System.out.println("iniciou");
+		//System.out.println("iniciou");
 
 	}
 
@@ -1680,7 +1680,7 @@ public abstract class HTTPSamplerBaseClassifier extends AbstractSampler
 	 */
 	protected HTTPSampleResult resultProcessing(boolean areFollowingRedirect,
 			int frameDepth, HTTPSampleResult res) {
-		System.out.print("Enter processing");
+		
 		boolean wasRedirected = false;
 		if (!areFollowingRedirect) {
 			if (res.isRedirect()) {
@@ -1717,7 +1717,7 @@ public abstract class HTTPSamplerBaseClassifier extends AbstractSampler
 			}
 		}
 
-		ResultDataSet result = new ResultDataSet();
+		/*ResultDataSet result = new ResultDataSet();
 
 		String body;
 		try {
@@ -1777,7 +1777,7 @@ public abstract class HTTPSamplerBaseClassifier extends AbstractSampler
 		 * .getPropertyAsInt("ThreadGroup.num_threads")); }
 		 */
 
-		result.setThreadNumber(JMeterContextService.getTotalThreads());
+		/*result.setThreadNumber(JMeterContextService.getTotalThreads());
 		// ResultDataSet.addResultDecisionTestFile(result);
 
 		if (res.getBodySize() > ResultDataSet.maxbodysize) {
@@ -1804,27 +1804,27 @@ public abstract class HTTPSamplerBaseClassifier extends AbstractSampler
 			ResultDataSet.maxmin = res.getTime();
 		}
 
-		result.setThreadNumber(JMeterContextService.getTotalThreads());
+		result.setThreadNumber(JMeterContextService.getTotalThreads());*/
 
-		if (res.getTime() > ResultDataSet.getTimeLearning()) {
-			ResultDataSet.setTimeLearning(res.getTime());
-		}
-		Configuration configuration = ClassifierController
-				.getActualConfiguration();
+		//if (res.getTime() > ResultDataSet.getTimeLearning()) {
+			//ResultDataSet.setTimeLearning(res.getTime());
+		//}
+		//Configuration configuration = ClassifierController
+			//	.getActualConfiguration();
 
-		String confName = "";
-		if (configuration == null) {
-			confName = "Default";
-		} else {
-			confName = configuration.getConfigurationName();
-		}
+		//String confName = "";
+		//if (configuration == null) {
+			//confName = "Default";
+		//} else {
+			//confName = configuration.getConfigurationName();
+		//}
 
 		// result.setSampleLabel(confName + "@"
 		// + JMeterContextService.getTotalThreads() + "@"
 		// + res.getSampleLabel());
 
-		System.out.print("Add resul;t file");
-		ResultDataSet.addResultDecisionTestFile(result);
+		//System.out.print("Add resul;t file");
+		//ResultDataSet.addResultDecisionTestFile(result);
 
 		// if (result.getFunction().equals("Aprendizado")) {
 		// if (res.getTime() > ResultDataSet.getTimeLearning()) {

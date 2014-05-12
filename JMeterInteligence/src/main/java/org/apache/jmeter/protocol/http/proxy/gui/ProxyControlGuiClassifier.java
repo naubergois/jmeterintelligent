@@ -232,6 +232,12 @@ public class ProxyControlGuiClassifier extends LogicControllerGui implements
 		modifyTestElement(model);
 		return model;
 	}
+	
+	@Override
+	public String getStaticLabel() {
+		// TODO Auto-generated method stub
+		return "Classifier Proxy";
+	}
 
 	protected ProxyControlClassifier makeProxyControl() {
 
